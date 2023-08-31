@@ -1,0 +1,310 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+body {
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 1px 1px 3px gray;
+}
+#bouton {
+    margin-left: 3rem;
+    border: 1px solid;
+}
+
+.notif {
+  width: 24rem;
+  margin-bottom: 2rem;
+  border: 1px solid;
+  color: black;
+  border-color: rgb(162, 152, 152);
+  margin-right: 3rem;
+  text-align: center;
+  justify-content: center;
+  background: rgb(166, 160, 160);
+  border-radius: 6px;
+  margin-top: 20px;
+  height: 5rem;
+}
+#histo {
+text-decoration: none;
+color: rgb(222, 215, 250);
+}
+
+
+.danger-color {
+  color: #dc3545;
+}
+
+.success-color {
+  color: #28a745;
+}
+
+.danger-message {
+  color: #dc3545;
+  margin-top: 5px;
+  font-weight: bold;
+  display: none;
+}
+
+.primary-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  padding: 20px;
+  margin-top: 15px;
+}
+
+header {
+  width: 100%;
+  
+}
+
+h3 {
+  margin-bottom: 3px;
+}
+
+.sub-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.budget {
+  border: 2px solid green;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.expense {
+  margin-top: 25px;
+  border: 2px solid red;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.col-1 {
+  flex-basis: 30%;
+  flex-grow: 0;
+}
+
+.col-2 {
+  flex-basis: 67%;
+  flex-grow: 0;
+}
+
+.values {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.values-content {
+  display: flex;
+  width: 100%;
+  justify-content: space-around;
+}
+
+.values-content div {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+.values-content i {
+  display: block;
+  margin: auto;
+  font-size: 45px;
+  color: #1c7cd6;
+  margin-top: 10px;
+}
+
+.values-content .val {
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.expenses-header {
+  display: flex;
+  width: 100%;
+  margin-top: 25px;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.expenses-header div {
+  width: 100%;
+  text-align: center;
+  font-weight: bold;
+}
+
+#expenses-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+
+.col {
+  width: 100%;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  margin: 0;
+  border: none;
+  box-shadow: 1px 1px 3px gray;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.btn {
+  border: none;
+  font-size: 20px;
+  outline: none;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: block;
+  margin: 10px auto 0 auto;
+  margin-left: -0rem;
+}
+
+.edit-button {
+  color: #1c7cd6;
+  cursor: pointer;
+}
+
+.delete-button {
+  cursor: pointer;
+}
+
+#expenses-list {
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 17px;
+}
+
+#calculate {
+  border: 2px solid #28a745;
+  color: #28a745;
+}
+
+#calculate:hover {
+  background-color: #28a745;
+  color: white;
+}
+
+#calculate:active {
+  background-color: #31cc55;
+  color: white;
+}
+
+#add-expense {
+  border: 2px solid #dc3545;
+  color: #dc3545;
+}
+
+#add-expense:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+#add-expense:active {
+  background-color: #ff3d51;
+  color: white;
+}
+#sv {
+    fill: #1c7cd6;
+}
+#closePopupButton {
+background-color: red;
+width: 20rem;
+border-radius: 5px;
+color: white;
+border: 0;
+}
+
+/* Style pour la pop-up */
+#historyPopup {
+  width: 24rem;
+  display: none;
+  /* transform: translate(-50%, -50%); */
+  padding: 20px;
+  background-color: white;
+  /* border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+  /* z-index: 1000; */
+}
+
+#popupContent {
+  margin-bottom: 10px;
+}
+
+#closePopupButton {
+  display: none;
+  cursor: pointer;
+}
+
+/* Style pour la liste ordonnée */
+#historyPopup ol {
+  list-style-type: decimal; /* Utilisez des numéros pour la liste ordonnée */
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+#historyPopup li {
+  margin-bottom: 5px;
+}
+/* ligne sous listes */
+.history-item {
+  position: relative;
+}
+
+.history-item:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: blue;
+  bottom: -5px; /* Ajustez la valeur pour contrôler la distance entre l'élément et la ligne */
+  left: 0;
+}
+
+.list-item {
+  position: relative;
+  padding: 3px;
+  margin-left: 5px;
+}
+
+.list-item:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 75%;
+  height: 1px;
+  background-color: blue;
+  bottom: -5px; /* Ajustez la valeur pour contrôler la distance entre l'élément et la ligne */
+}
+/* fin ligne sous liste  */
+
+
+@media (max-width: 930px) {
+  .sub-container {
+    flex-wrap: wrap;
+  }
+  .col-1,
+  .col-2 {
+    flex-basis: 100%;
+  }
+  .budget {
+    margin-bottom: 15px;
+  }
+}
