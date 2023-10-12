@@ -26,7 +26,7 @@
         <div class="sub-container">
             <div class="budget col-1">
                 <h3>Please Enter Your Budget</h3>
-                <input id="budget-input" type="number" value="" inputmode="numeric" />
+                <input id="budget-input" placeholder="Budget"  type="number" value="" inputmode="numeric" />
                 <button id="calculate" class="btn">Calculate</button>
                 <div id="budget-message" class="danger-message">
                     Please set a budget value
@@ -57,9 +57,9 @@
         <div class="sub-container">
             <div class="expense col-1">
                 <h3>Please Enter Your Expense</h3>
-                <input id="expense-description" type="text" />
+                <input id="expense-description" placeholder="Expense" type="text" />
                 <h3>Please Enter Expense Amount</h3>
-                <input id="expense-input" type="number" inputmode="numeric" />
+                <input id="expense-input" placeholder="E Amount" type="number" inputmode="numeric" />
                 <button id="add-expense" class="btn">Add Expense</button>
                 <div id="expense-message" class="danger-message">
                     Please set a description and value
@@ -92,7 +92,7 @@
         <!-- La pop-up elle-même -->
         <div id="historyPopup" class="popup">
             <div id="popupContent"></div>
-            <button id="closePopupButton" style="display: none;">Close</button>
+            <button id="closePopupButton"  style="display: none;">Close</button>
         </div>
         <hr>
         <canvas class="canva" id="expense-chart"></canvas>

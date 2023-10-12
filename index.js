@@ -42,8 +42,6 @@ input_budget.addEventListener("keypress", onlyDecimals, false);
 input_expense.addEventListener("keypress", onlyDecimals, false);
 his.addEventListener("click", showExpenseHistory,false);
 
-
-
 // Lorsque le lien "History" est cliqué
 const histoLink = document.getElementById("histo");
 histoLink.addEventListener("click", function (event) {
@@ -52,13 +50,11 @@ histoLink.addEventListener("click", function (event) {
 });
 
 
-
 function addBudget() {
   if (input_budget.value === "") {
     budget_message.style.display = "block";
   } else {
     const budgetValue = parseFloat(input_budget.value);
-
     if (budgetValue < 0) {
       input_budget.value = null;
       showNotification("Le budget ne peut pas être négatif. La valeur a été ajustée à 0.");
@@ -70,7 +66,6 @@ function addBudget() {
       let newbudget = parseFloat(old.budget_amount) + budgetValue;
       console.log('somme du budget: ' + newbudget);
       budget.budget_amount = newbudget;
-
       // Mettre à jour les calculs et les valeurs affichées
       calculate(false,newbudget);
       showHistoryNotification("Ajout du budget");
@@ -87,41 +82,32 @@ function calculate(val,newbudget) {
   budget.balance = budget.budget_amount - budget.total_expenses;
   localStorage.setItem("budget", JSON.stringify(budget));
   setValues();
-
 }
 
 function showHistoryNotification(message) {
   const notifDiv = document.querySelector(".notif");
   const his = document.getElementById("histo");
-
   // Créer un fragment de document pour stocker le contenu de #histo
   const histoFragment = document.createDocumentFragment();
   while (his.firstChild) {
     histoFragment.appendChild(his.firstChild);
   }
-
   // Masquer le contenu de #histo
   his.innerHTML = "";
-
   // Créer l'élément de notification
   const notificationText = document.createElement("p");
   notificationText.textContent = message;
   notificationText.classList.add("notification-message");
-
   // Ajouter le texte de notification à notifDiv
   notifDiv.appendChild(notificationText);
-
   // Appliquer le style de fond à notifDiv
   notifDiv.style.background = "linear-gradient(to bottom, green 50%, white 50%)";
-
   // Disparition automatique de la notification après 5 secondes
   setTimeout(() => {
     // Retirer l'élément de notification
     notifDiv.removeChild(notificationText);
-
     // Réinitialiser le style de fond
     notifDiv.style.background = "rgb(166, 160, 160)";
-
     // Réafficher le contenu de #histo depuis le fragment
     his.appendChild(histoFragment);
   }, 5000); // 5000 millisecondes (5 secondes)
@@ -144,9 +130,7 @@ function addExpense() {
     expense_message.style.display = "block";
   } else {
     expense_message.style.display = "none";
-
     const expenseValue = parseFloat(input_expense.value);
-
     // Vérifier si la valeur est négative
     if (expenseValue < 0) {
       // Si la valeur est négative, définir la valeur de l'input sur 0
@@ -165,16 +149,16 @@ function addExpense() {
     }
   }
   
-  // Disparition automatique après 5 secondes
-  setTimeout(() => {
-    const notifDiv = document.querySelector(".notif");
-    const histoLink = document.getElementById("histo");
-    const histoContent = histoLink.innerHTML;
+  // // Disparition automatique après 5 secondes
+  // setTimeout(() => {
+  //   const notifDiv = document.querySelector(".notif");
+  //   const histoLink = document.getElementById("histo");
+  //   const histoContent = histoLink.innerHTML;
 
-    notifDiv.removeChild(notifDiv.querySelector(".notification-message"));
-    histoLink.innerHTML = histoContent;
-    notifDiv.style.background = "block";
-  }, 5000); // 5000 millisecondes (5 secondes)
+  //   notifDiv.removeChild(notifDiv.querySelector(".notification-message"));
+  //   histoLink.innerHTML = histoContent;
+  //   notifDiv.style.background = "block";
+  // }, 5000); // 5000 millisecondes (5 secondes)
 }
 
 
@@ -210,6 +194,8 @@ function setValues() {
   showListExpenses();
 }
 
+
+// calcule le total des dépenses à partir des données stockées dans l'objet
 function calculateExpenses() {
   let total = 0;
   if (budget.expenses) {
@@ -219,6 +205,7 @@ function calculateExpenses() {
   }
   return total;
 }
+
 
 function showListExpenses() {
   let content = "";
