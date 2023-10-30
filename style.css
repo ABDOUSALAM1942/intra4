@@ -141,6 +141,9 @@ h3 {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
+  color: #dc3545;
+  font-weight: bold;
+  font-size: 17px;
 }
 
 .list-item {
@@ -185,11 +188,7 @@ input {
   cursor: pointer;
 }
 
-#expenses-list {
-  color: #dc3545;
-  font-weight: bold;
-  font-size: 17px;
-}
+
 
 #calculate {
   border: 2px solid #28a745;
@@ -295,7 +294,6 @@ border: 0;
 }
 /* fin ligne sous liste  */
 
-
 @media (max-width: 930px) {
   .sub-container {
     flex-wrap: wrap;
@@ -308,3 +306,89 @@ border: 0;
     margin-bottom: 15px;
   }
 }
+@media (max-width: 425px) {
+  body {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+  }
+  .notif {
+    width: 10rem;
+    margin-bottom: 32rem;
+    border: 1px solid;
+    color: black;
+    border-color: rgb(162, 152, 152);
+    margin-left: 7rem;
+    text-align: center;
+    justify-content: center;
+    background: rgb(166, 160, 160);
+    border-radius: 6px;
+    height: 2rem;
+  }
+  /* Style pour la pop-up */
+#historyPopup {
+  margin-top: -32rem;
+  margin-left: 5rem;
+  width: 14rem;
+  display: none;
+  padding: 20px;
+  background-color: white;
+
+}
+#closePopupButton {
+  display: none;
+  cursor: pointer;
+  width: 14rem;
+  margin-left: -16px;
+  font-size: 10px;
+}
+
+/* Style pour la liste ordonnée */
+#historyPopup ol {
+  list-style-type: decimal; /* Utilisez des numéros pour la liste ordonnée */
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+#historyPopup li {
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+#expense-chart {
+  height: 20%; /* Pour s'assurer que le graphique prend toute la largeur à 425px ou moins */
+}
+.primary-container {
+font-size: 8px;
+}
+#budget-input{
+  font-size: 20px;
+}
+#expense-description {
+  font-size: 20px;
+}
+#expense-input{
+  font-size: 20px;
+}
+i.fas.fa-money-bill {
+  font-size: 34px; 
+}
+i.fas.fa-credit-card {
+  font-size: 34px;
+}
+.fas.fa-dollar-sign{
+  font-size: 34px;
+}
+#budget-amount {
+  font-size: 24px;
+
+}
+#expenses-amount{
+  font-size: 24px;
+}
+#balance-amount{
+  font-size: 24px;
+}
+}
+
+
