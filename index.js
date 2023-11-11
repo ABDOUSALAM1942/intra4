@@ -50,38 +50,44 @@ histoLink.addEventListener("click", function (event) {
 });
 
 
+// Fonction pour ajouter un budget
 function addBudget() {
+  // Vérifie si le champ de saisie du budget est vide
   if (input_budget.value === "") {
-    budget_message.style.display = "block";
+      budget_message.style.display = "block"; // Affiche un message d'erreur
   } else {
-    const budgetValue = parseFloat(input_budget.value);
-    if (budgetValue < 0) {
-      input_budget.value = null;
-      showNotification("Le budget ne peut pas être négatif. La valeur a été ajustée à 0.");
-    } else {
-      budget_message.style.display = "none";
-      const old = JSON.parse(localStorage.getItem("budget"));  
-      console.log('valeur dans le localstorage: ' + parseFloat(old.budget_amount));
-      // Ajouter le nouveau budget à l'ancien budget
-      let newbudget = parseFloat(old.budget_amount) + budgetValue;
-      console.log('somme du budget: ' + newbudget);
-      budget.budget_amount = newbudget;
-      // Mettre à jour les calculs et les valeurs affichées
-      calculate(false,newbudget);
-      showHistoryNotification("Ajout du budget");
-      showHistoryNotification("Votre budget a été ajouté avec succès");
-      localStorage.setItem(budget,budget_amount);
-    }
+      const budgetValue = parseFloat(input_budget.value); // Convertit la valeur du budget en nombre à virgule flottante
+      // Vérifie si le budget est négatif
+      if (budgetValue < 0) {
+          input_budget.value = null; // Réinitialise la valeur du champ de saisie à zéro
+          showNotification("Le budget ne peut pas être négatif. La valeur a été ajustée à 0."); // Affiche une notification d'erreur
+      } else {
+          budget_message.style.display = "none"; // Cache le message d'erreur du budget
+          const old = JSON.parse(localStorage.getItem("budget"));
+          console.log('valeur dans le localstorage: ' + parseFloat(old.budget_amount));
+          // Ajoute le nouveau budget à l'ancien budget
+          let newbudget = parseFloat(old.budget_amount) + budgetValue;
+          console.log('somme du budget: ' + newbudget);
+          budget.budget_amount = newbudget;
+          // Met à jour les calculs et les valeurs affichées
+          calculate(false, newbudget);
+          showHistoryNotification("Ajout du budget");
+          showHistoryNotification("Votre budget a été ajouté avec succès");
+          localStorage.setItem("budget", JSON.stringify(budget));
+      }
   }
 }
-function calculate(val,newbudget) {
+
+// Fonction pour effectuer les calculs du budget
+function calculate(val, newbudget) {
+  // Vérifie si la valeur val est fausse (false)
   if (!val) {
-    budget.budget_amount = newbudget;
+      budget.budget_amount = newbudget; // Met à jour le montant du budget avec la nouvelle valeur
   }
-  budget.total_expenses = calculateExpenses();
-  budget.balance = budget.budget_amount - budget.total_expenses;
-  localStorage.setItem("budget", JSON.stringify(budget));
-  setValues();
+  budget.total_expenses = calculateExpenses(); // Calcule le total des dépenses
+  budget.balance = budget.budget_amount - budget.total_expenses; // Calcule le solde du budget
+  localStorage.setItem("budget", JSON.stringify(budget)); // Met à jour le budget dans le stockage local
+  setValues(); // Met à jour les valeurs affichées
 }
 
 function showHistoryNotification(message) {
@@ -131,85 +137,126 @@ function addExpense() {
   } else {
     expense_message.style.display = "none";
     const expenseValue = parseFloat(input_expense.value);
-    // Vérifier si la valeur est négative
     if (expenseValue < 0) {
-      // Si la valeur est négative, définir la valeur de l'input sur 0
       input_expense.value = "0";
       showHistoryNotification("La valeur des dépenses ne peut pas être négative. La valeur a été ajustée à 0.");
     } else {
-      budget.expenses.push({
-        title: input_expense_desc.value,
-        value: expenseValue
-      });
+      if (editingIndex !== null) {
+        // Si un index d'édition existe, vérifiez si le titre est modifié
+        if (budget.expenses[editingIndex].title !== input_expense_desc.value) {
+          // Si le titre est modifié, vérifiez s'il existe déjà une dépense avec le nouveau titre
+          const existingExpenseIndex = budget.expenses.findIndex(item => item.title === input_expense_desc.value);
+          if (existingExpenseIndex !== -1) {
+            // Si une dépense avec le même titre existe, fusionnez les deux dépenses
+            budget.expenses[existingExpenseIndex].value += expenseValue;
+          } else {
+            // Sinon, modifiez simplement le titre de la dépense
+            budget.expenses[editingIndex].title = input_expense_desc.value;
+            budget.expenses[editingIndex].value = expenseValue;
+          }
+        } else {
+          // Si le titre n'est pas modifié, mettez à jour simplement la valeur
+          budget.expenses[editingIndex].value = expenseValue;
+        }
+        // Réinitialisez l'index d'édition après l'utilisation
+        editingIndex = null;
+      } else {
+        // Sinon, ajoutez normalement une nouvelle dépense
+        const existingExpenseIndex = budget.expenses.findIndex(item => item.title === input_expense_desc.value);
+        if (existingExpenseIndex !== -1) {
+          // Si une dépense avec le même titre existe, fusionnez les deux dépenses
+          budget.expenses[existingExpenseIndex].value += expenseValue;
+        } else {
+          // Sinon, ajoutez une nouvelle dépense
+          budget.expenses.push({
+            title: input_expense_desc.value,
+            value: expenseValue
+          });
+        }
+      }
       calculate(true);
-      // Mise à jour automatique du graphique
       updateExpenseChart();
       showHistoryNotification("Ajout des dépenses");
       showHistoryNotification("La dépense a été ajoutée avec succès");
+      // Réinitialisez l'index d'édition après l'ajout d'une nouvelle dépense
+      editingIndex = null;
     }
   }
-  
-  // // Disparition automatique après 5 secondes
-  // setTimeout(() => {
-  //   const notifDiv = document.querySelector(".notif");
-  //   const histoLink = document.getElementById("histo");
-  //   const histoContent = histoLink.innerHTML;
-
-  //   notifDiv.removeChild(notifDiv.querySelector(".notification-message"));
-  //   histoLink.innerHTML = histoContent;
-  //   notifDiv.style.background = "block";
-  // }, 5000); // 5000 millisecondes (5 secondes)
 }
+
+
+
+
 
 
 // Fonction pour mettre à jour le graphique des dépenses
 function updateExpenseChart() {
+  // Obtient les titres des dépenses
   const expenseLabels = budget.expenses.map(item => item.title);
+  // Obtient les valeurs des dépenses converties en nombres à virgule flottante
   const expenseValues = budget.expenses.map(item => parseFloat(item.value));
-
+  // Met à jour les labels et les données du graphique des dépenses
   expenseChart.data.labels = expenseLabels;
   expenseChart.data.datasets[0].data = expenseValues;
+  // Actualise le graphique
   expenseChart.update();
-  showHistoryNotification.textContent="Mise à jour";
-  showHistoryNotification.textContent="La dépense a été mise à jour";
+  // Affiche des notifications d'historique
+  showHistoryNotification.textContent = "Mise à jour";
+  showHistoryNotification.textContent = "La dépense a été mise à jour";
 }
+
 
 
 
 /* SETTING THE VALUES FOR LOCAL-STORAGE */
+// Fonction pour définir les valeurs affichées dans l'interface utilisateur
 function setValues() {
+  // Met à jour les éléments HTML avec les valeurs actuelles du budget
   budget_amount.innerHTML = ` ${budget.budget_amount} F`;
   expenses_amount.innerHTML = ` ${budget.total_expenses} F`;
   balance_amount.innerHTML = ` ${budget.balance} F`;
+  // Réinitialise les champs de saisie à des valeurs vides
   input_budget.value = "";
   input_expense_desc.value = "";
   input_expense.value = "";
+  // Vérifie si le solde du budget est positif ou nul
   if (budget.balance >= 0) {
-    balance_amount.classList.remove("danger-color");
-    balance_amount.classList.add("success-color");
+      // Si positif ou nul, applique une classe de couleur pour indiquer le succès
+      balance_amount.classList.remove("danger-color");
+      balance_amount.classList.add("success-color");
   } else {
-    balance_amount.classList.remove("success-color");
-    balance_amount.classList.add("danger-color");
+      // Sinon, applique une classe de couleur pour indiquer une alerte/danger
+      balance_amount.classList.remove("success-color");
+      balance_amount.classList.add("danger-color");
   }
+  // Met à jour la liste des dépenses affichée dans l'interface utilisateur
   showListExpenses();
 }
 
 
+function setEditingIndex(index) {
+  localStorage.setItem("editingIndex", index);
+}
+
+function getEditingIndex() {
+  return localStorage.getItem("editingIndex");
+}
+
 // calcule le total des dépenses à partir des données stockées dans l'objet
 function calculateExpenses() {
-  let total = 0;
-  if (budget.expenses) {
-    for (let item of budget.expenses) {
-      total += parseFloat(item.value);
-    }
-  }
-  return total;
+  budget.total_expenses = calculateTotalExpenses();
+  budget.balance = budget.budget_amount - budget.total_expenses;
+  localStorage.setItem("budget", JSON.stringify(budget));
+  setValues();
+  return budget.total_expenses; // Retournez le total pour une utilisation ultérieure si nécessaire
 }
 
 
 function showListExpenses() {
   let content = "";
+  let totalExpenses = 0;
   for (let [index, item] of budget.expenses.entries()) {
+    totalExpenses += parseFloat(item.value);
     let divs = `
       <div class="list-item">
         <div class="col">${item.title}</div>
@@ -224,33 +271,62 @@ function showListExpenses() {
   }
   let el = document.querySelector("#expenses-list");
   el.innerHTML = content;
-
   setEvents();
+}
+function calculateTotalExpenses() {
+  let total = 0;
+  if (budget.expenses) {
+    for (let item of budget.expenses) {
+      total += parseFloat(item.value);
+    }
+  }
+  return total;
 }
 
 
+
+
+// Fonction pour définir les événements de clic pour les boutons d'édition et de suppression
 function setEvents() {
   const editButtons = document.querySelectorAll(".edit-button");
   const deleteButtons = document.querySelectorAll(".delete-button");
+  // Ajoute un écouteur d'événement de clic à chaque bouton d'édition
   editButtons.forEach(item => {
-    item.addEventListener("click", editExpense, false);
+      item.addEventListener("click", editExpense, false);
   });
+  // Ajoute un écouteur d'événement de clic à chaque bouton de suppression
   deleteButtons.forEach(item => {
-    item.addEventListener("click", deleteExpense, false);
+      item.addEventListener("click", deleteExpense, false);
   });
-
 }
+
+
+// Fonction pour éditer une dépense existante
+let editingIndex = null; // Ajoutez cette variable en dehors de vos fonctions
+
+// ...
 
 function editExpense(e) {
   let id = e.target.id;
   let title = budget.expenses[id].title;
   let value = budget.expenses[id].value;
-  budget.expenses.splice(id, 1);
+  editingIndex = id; // Stocke l'index en cours d'édition dans la variable editingIndex
+
+  // Ne supprime pas la dépense immédiatement
+  // Remarque : vous pourriez également cacher la dépense au lieu de la supprimer pour éviter des problèmes d'affichage
+  // budget.expenses.splice(id, 1);
+
+  // Recalcule le budget après la suppression de la dépense
   calculate(true);
+
+  // Met à jour les champs d'entrée avec les valeurs de la dépense existante
   input_expense_desc.value = title;
   input_expense.value = value;
-  showHistoryNotification("Edition des depenses");
+
+  // Affiche une notification indiquant que la dépense est en cours d'édition
+  showHistoryNotification("Edition des dépenses");
 }
+
 
 function deleteExpense(e) {
   let id = e.target.id;
@@ -258,19 +334,21 @@ function deleteExpense(e) {
   calculate(true);
   showHistoryNotification("suppression des depenses");
   showHistoryNotification("La depense a été supprimer avec succès");
+  window.location.reload();
 }
 
+// Fonction pour valider que seule la saisie de chiffres et d'un point décimal est autorisée
 function onlyDecimals(event) {
+  // Vérifie si le code de la touche est compris entre 0 et 9 (chiffres) ou est égal à 46 (code pour le point décimal)
   if ((event.charCode >= 48 && event.charCode <= 57) || event.charCode === 46) {
-    return true;
+      return true; // Autorise la saisie si la touche est un chiffre ou un point décimal
   } else {
-    event.preventDefault();
+      event.preventDefault(); // Empêche la saisie si la touche n'est pas un chiffre ou un point décimal
   }
 }
 
 // Sélectionnez le bouton de réinitialisation du budget
 const btn_reset_budget = document.querySelector("#bouton");
-
 // Ajoutez un écouteur d'événement pour le bouton de réinitialisation du budget
 btn_reset_budget.addEventListener("click", resetBudget);
 
@@ -326,7 +404,6 @@ function showExpenseHistory() {
   // Créez un élément de liste ordonnée (<ol>) pour afficher les éléments de l'historique
   const historyList = document.createElement("ol");
   historyList.innerHTML = historyListItems;
-
   // Obtenir la pop-up et son contenu
   const popup = document.getElementById("historyPopup");
   const popupContent = document.getElementById("popupContent");
