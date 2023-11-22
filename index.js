@@ -304,7 +304,7 @@ function setEvents() {
 // Fonction pour éditer une dépense existante
 let editingIndex = null; // Ajoutez cette variable en dehors de vos fonctions
 
-// ...
+
 
 function editExpense(e) {
   let id = e.target.id;
@@ -389,6 +389,7 @@ const expenseChart = new Chart(expenseChartCanvas, {
     },
   },
 });
+
 function showExpenseHistory() {
   const history = JSON.parse(localStorage.getItem("budget")).expenses;
   let historyListItems = "";
